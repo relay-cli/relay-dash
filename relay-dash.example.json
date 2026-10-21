@@ -1,0 +1,12 @@
+{
+  "sentinel": {"url": "http://127.0.0.1:7331"},
+  "services": [
+    {"name": "inference", "url": "http://127.0.0.1:8080"},
+    {"name": "embeddings", "url": "http://127.0.0.1:8081"},
+    {"name": "ocr", "url": "http://127.0.0.1:8082"},
+    {"name": "voice", "url": "http://127.0.0.1:8083"},
+    {"name": "mcp", "url": "http://127.0.0.1:3333"},
+    {"name": "agent", "url": "http://127.0.0.1:4141"}
+  ],
+  "intervalSeconds": 5
+}
