@@ -1,0 +1,16 @@
+name: Feature request
+description: Suggest a focused improvement to the dashboard.
+body:
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use case
+      description: Describe what you need to see about pack-sentinel or an impossibleG service that the dashboard does not show today.
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Proposed behavior
+    validations:
+      required: true
