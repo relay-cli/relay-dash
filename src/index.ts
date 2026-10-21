@@ -38,7 +38,16 @@ export {
   type ServiceSource,
   type ServiceStatus,
 } from './sources/services.js';
-export {Dashboard, type DashboardProps} from './views/Dashboard.js';
+export {
+  Dashboard,
+  DashboardView,
+  type DashboardProps,
+  type DashboardViewProps,
+} from './views/Dashboard.js';
+export {SentinelPanel, type SentinelPanelProps} from './views/SentinelPanel.js';
+export {ServicesPanel, type ServicesPanelProps} from './views/ServicesPanel.js';
+export {usePoll, type PollState} from './data/usePoll.js';
+export {clean} from './text.js';
 export {runDashboard, type RunDashboardOptions} from './run.js';
 export {monoTheme, relayTheme, shellThemes, type ShellTheme} from './theme.js';
 export {relayDashVersion} from './version.js';
