@@ -1,0 +1,160 @@
+<!doctype html>
+<!--
+  Source for banner.png and .github/social-preview.png. Render with:
+  see docs/assets/ARTWORK.md
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Relay Dash artwork</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        background: #080b0f;
+      }
+      svg {
+        display: block;
+      }
+      text {
+        font-family: 'Cascadia Mono', Consolas, 'JetBrains Mono', monospace;
+      }
+      .title {
+        font-family: 'Segoe UI', 'Inter', Arial, sans-serif;
+        font-weight: 800;
+        letter-spacing: 4px;
+        fill: #eef2f6;
+      }
+      .tagline {
+        fill: #a3adb8;
+        font-size: 27px;
+      }
+      .label {
+        font-weight: 700;
+        font-size: 26px;
+        letter-spacing: 1px;
+      }
+      .row {
+        font-size: 24px;
+        fill: #e8edf2;
+      }
+      .muted {
+        fill: #84909c;
+      }
+    </style>
+  </head>
+  <body>
+    <svg id="art" xmlns="http://www.w3.org/2000/svg"></svg>
+    <script>
+      const social = new URLSearchParams(location.search).has('social');
+      const palette = {
+        background: '#080B0F',
+        surface: '#0E141B',
+        rule: '#2A3440',
+        blue: '#48A8FF',
+        orange: '#FF8A3D',
+        green: '#4FD18B',
+        red: '#FF4D5A',
+        yellow: '#F0C84B',
+      };
+
+      // The Relay mark: a blue and an orange chevron joined by a dark square.
+      const mark = (x, y, size) => `
+        <g transform="translate(${x} ${y}) scale(${size / 640})">
+          <polyline points="40,40 250,245 40,450" fill="none" stroke="${palette.blue}"
+            stroke-width="112" stroke-linecap="round" stroke-linejoin="round" />
+          <polyline points="330,330 520,520 330,705" fill="none" stroke="${palette.orange}"
+            stroke-width="112" stroke-linecap="round" stroke-linejoin="round" />
+          <rect x="222" y="262" width="150" height="150" rx="22" fill="#151B23" />
+        </g>`;
+
+      const card = (x, y, width, height, accent, label, body) => `
+        <g transform="translate(${x} ${y})">
+          <rect width="${width}" height="${height}" rx="10" fill="${palette.surface}"
+            stroke="${palette.rule}" stroke-width="2" />
+          <path d="M10 0 H14 V${height} H10 A10 10 0 0 1 0 ${height - 10} V10 A10 10 0 0 1 10 0 Z"
+            fill="${accent}" />
+          <text x="40" y="50" class="label" fill="${accent}">${label}</text>
+          ${body}
+        </g>`;
+
+      const services = [
+        ['●', palette.green, 'inference', 'ready', '3', 'qwen3-8b'],
+        ['●', palette.green, 'embeddings', 'ready', '0', 'bge-small-en'],
+        ['○', palette.yellow, 'ocr', 'model_loading', '–', ''],
+      ];
+      const incidents = [
+        ['CRIT', palette.red, 'SSH brute force from 203.0.113.9', '2m'],
+        ['HIGH', palette.red, 'Secret committed: AWS access key', '14m'],
+        ['MED', palette.yellow, 'Honeyfile opened: payroll.xlsx', '3h'],
+      ];
+
+      const servicesBody = (width) =>
+        `<text x="${width - 36}" y="50" class="row muted" text-anchor="end">2/3 ready</text>` +
+        services
+          .map(
+            ([dot, color, name, state, queue, model], index) => `
+          <g transform="translate(40 ${98 + index * 40})">
+            <text class="row" fill="${color}" style="fill:${color}">${dot}</text>
+            <text x="36" class="row">${name}</text>
+            <text x="250" class="row" style="fill:${color}">${state}</text>
+            <text x="470" class="row muted">queue</text>
+            <text x="552" class="row" style="fill:${queue === '3' ? palette.yellow : '#E8EDF2'}">${queue}</text>
+            <text x="610" class="row muted">${model}</text>
+          </g>`,
+          )
+          .join('');
+
+      const sentinelBody = (width) =>
+        `<text x="${width - 36}" y="50" class="row muted" text-anchor="end">1284 signals · 17 incidents</text>` +
+        incidents
+          .map(
+            ([severity, color, title, age], index) => `
+          <g transform="translate(40 ${98 + index * 40})">
+            <text class="row" style="fill:${color};font-weight:700">${severity}</text>
+            <text x="90" class="row muted">den</text>
+            <text x="160" class="row">${title}</text>
+            <text x="${width - 76}" class="row muted" text-anchor="end">${age}</text>
+          </g>`,
+          )
+          .join('');
+
+      const terminal = (x, y, width, height) => {
+        const inner = width - 40;
+        return `
+        <g transform="translate(${x} ${y})">
+          <rect width="${width}" height="${height}" rx="14" fill="#0A0F14"
+            stroke="${palette.rule}" stroke-width="2" />
+          <text x="24" y="44" class="row muted" style="font-size:26px">$ <tspan fill="#E8EDF2" style="fill:#E8EDF2">relay-dash</tspan></text>
+          <text x="${width - 24}" y="44" class="row muted" text-anchor="end" style="font-size:24px">updated 2s ago</text>
+          ${card(20, 70, inner, 220, palette.blue, 'SERVICES', servicesBody(inner))}
+          ${card(20, 308, inner, 220, palette.orange, 'PACK-SENTINEL', sentinelBody(inner))}
+        </g>`;
+      };
+
+      const svg = document.getElementById('art');
+      if (social) {
+        svg.setAttribute('width', 1774);
+        svg.setAttribute('height', 887);
+        svg.setAttribute('viewBox', '0 0 2000 1000');
+        svg.innerHTML = `
+          <rect width="2000" height="1000" fill="${palette.background}" />
+          ${mark(200, 200, 320)}
+          <text x="370" y="730" class="title" font-size="86" text-anchor="middle">RELAY DASH</text>
+          <line x1="740" y1="170" x2="740" y2="830" stroke="${palette.rule}" stroke-width="2" />
+          ${terminal(790, 210, 1150, 560)}`;
+      } else {
+        svg.setAttribute('width', 2172);
+        svg.setAttribute('height', 724);
+        svg.setAttribute('viewBox', '0 0 2000 667');
+        svg.innerHTML = `
+          <rect width="2000" height="667" fill="${palette.background}" />
+          ${mark(60, 190, 250)}
+          <text x="320" y="330" class="title" font-size="92">RELAY DASH</text>
+          <text x="324" y="388" class="tagline">Services and findings, at a glance.</text>
+          <line x1="975" y1="50" x2="975" y2="617" stroke="${palette.rule}" stroke-width="2" />
+          ${terminal(1015, 55, 945, 557)}`;
+      }
+    </script>
+  </body>
+</html>
