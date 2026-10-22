@@ -6,7 +6,7 @@ import {ConfigError, loadConfig} from './config.js';
 import {pollOnce} from './sources/poll.js';
 import {runDashboard} from './run.js';
 import {relayDashVersion} from './version.js';
-import {Dashboard} from './views/Dashboard.js';
+import {Dashboard, DashboardView} from './views/Dashboard.js';
 
 const main = async (): Promise<void> => {
   let options;
@@ -43,15 +43,18 @@ const main = async (): Promise<void> => {
   }
 
   if (options.snapshot || !process.stdout.isTTY || !process.stdin.isTTY) {
-    const columns = process.stdout.columns || 80;
-    const frame = renderToString(<Dashboard width={columns} height={24} interactive={false} />, {
-      columns,
-    });
+    const columns = process.stdout.columns || 100;
+    const rows = process.stdout.rows || 24;
+    const data = await pollOnce(config);
+    const frame = renderToString(
+      <DashboardView config={config} data={data} width={columns} height={rows} />,
+      {columns},
+    );
     process.stdout.write(`${frame}\n`);
     return;
   }
 
-  await runDashboard(<Dashboard />, {alternateScreen: !options.inline});
+  await runDashboard(<Dashboard config={config} />, {alternateScreen: !options.inline});
 };
 
 await main();

@@ -1,6 +1,8 @@
-# Relay Dash
+<p align="center">
+  <img src="./docs/assets/banner.png" alt="Relay Dash" width="100%">
+</p>
 
-Relay Dash is a terminal dashboard for the services we run. It shows open findings from [pack-sentinel](https://github.com/dispersal-wolves/pack-sentinel) next to the status of the impossibleG services: which models are loaded, how deep each request queue is, and whether every service is live and ready.
+Relay Dash is a terminal dashboard for the services we run. It shows open findings from [pack-sentinel](https://github.com/dispersal-wolves/pack-sentinel) next to the status of the impossibleG services: which models are loaded, how deep each request queue is, and whether every service is live and ready. It only reads; it never acknowledges incidents, runs collectors, or loads models.
 
 ## Try it
 
@@ -9,7 +11,7 @@ npm install
 npm run dev
 ```
 
-Press `q` to quit. To print one frame without opening the interactive screen:
+Press `r` to refresh now and `q` to quit. To print one frame without opening the interactive screen:
 
 ```sh
 npx tsx src/cli.tsx --snapshot
@@ -40,13 +42,21 @@ When pack-sentinel has `apiToken` set, put the token in `RELAY_DASH_SENTINEL_TOK
 relay-dash --json --no-sentinel --service inference=http://127.0.0.1:8080
 ```
 
+## Documentation
+
+- [Architecture](./docs/architecture.md)
+- [Artwork](./docs/assets/ARTWORK.md)
+- [Contributing](./CONTRIBUTING.md)
+- [Security](./SECURITY.md)
+
 ## Development
 
 ```sh
+npm install
 npm run check
 ```
 
-Relay Dash requires Node.js 22 or newer. See [the architecture notes](./docs/architecture.md) and [CONTRIBUTING.md](./CONTRIBUTING.md).
+`npm run check` verifies formatting, linting, strict types, tests, and the distributable package. Relay Dash requires Node.js 22 or newer.
 
 ## License
 
