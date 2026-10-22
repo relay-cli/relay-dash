@@ -65,6 +65,7 @@ export const describeError = (error: unknown): string => {
       if (cause.code === 'ENOTFOUND') return 'host not found';
       return cause.code;
     }
+    if (cause instanceof Error && cause.message !== '') return cause.message;
     return error.message;
   }
   return String(error);

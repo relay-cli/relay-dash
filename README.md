@@ -9,7 +9,7 @@ npm install
 npm run dev
 ```
 
-Press `q` to quit. To print one frame without opening the interactive screen:
+Press `r` to refresh now and `q` to quit. To print one frame without opening the interactive screen:
 
 ```sh
 npx tsx src/cli.tsx --snapshot
